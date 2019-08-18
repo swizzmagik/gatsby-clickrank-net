@@ -118,7 +118,6 @@ module.exports = {
             });
         });
 
-
         let parseParentCategory = function(node) {
             let catProducts = [];
             node.Category.forEach((cat)=>{
@@ -133,6 +132,8 @@ module.exports = {
                     id: site.Id[0],
                     title: site.Title[0],
                     description: site.Description[0],
+                    gravity: site.Gravity[0],
+                    activateDate: site.ActivateDate[0],
                     category: node.Name[0],
                     parentCategory: parentCategory
                 };
