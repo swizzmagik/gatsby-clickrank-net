@@ -3,6 +3,7 @@
  */
 const https = require("https");
 const fs = require("fs");
+const slug = require("slug");
 const extract = require("extract-zip");
 const path = require("path");
 const xml2js = require("xml2js");
@@ -144,30 +145,32 @@ module.exports = {
 
         products
           .sort((a, b) => {
-            return a.id > b.id ? 1 : 0;
+            if (a.id > b.id) {
+              return 1;
+            } else if (a.id < b.id) {
+              return -1;
+            }
+            return 0;
           })
           .forEach(p => {
             let filename =
               outputPath +
               "/" +
-              p.parentCategory.toLowerCase() +
+              slug(p.parentCategory).toLowerCase() +
               "/" +
-              p.category.toLowerCase() +
+              slug(p.category).toLowerCase() +
               "/" +
               p.id.toLowerCase() +
-              ".png";
+              ".jpg";
 
             setTimeout(() => {
               if (!fs.existsSync(filename)) {
-                console.log("getting screenshot for " + p.id);
-                new screenshot("http://" + affiliateId + "." + p.id + ".hop.clickbank.net")
-                  .width(800)
-                  .height(600)
-                  .clip()
+                console.log("getting screenshot: " + filename);
+                new screenshot("http://" + affiliateId + "." + p.id + ".hop.clickbank.net", {})
                   .capture()
                   .then(img => {
                     fs.writeFile(filename, img, function() {
-                      console.log("saved screenshot for " + p.id);
+                      console.log("saved screenshot for " + filename);
                     });
                   });
               } else {
