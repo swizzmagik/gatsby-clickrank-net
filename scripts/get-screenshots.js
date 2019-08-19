@@ -3,4 +3,4 @@
  */
 const cb = require("./clickbank-utils");
 
-cb.run();
+cb.getScreenshots();
